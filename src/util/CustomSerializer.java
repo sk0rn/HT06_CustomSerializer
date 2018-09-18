@@ -33,7 +33,7 @@ public class CustomSerializer {
     public void serialize(Object o, String file) throws TransformerException {
         this.o = o;
         Document doc = docBuilder.newDocument();
-        Element root = doc.createElement(o.getClass().getSimpleName());
+        Element root = doc.createElement(o.getClass().getName());
         doc.appendChild(root);
         for (Class cl = o.getClass(); !cl.getSimpleName().equals("Object"); cl = cl.getSuperclass()) {
             for (Field field : cl.getDeclaredFields()) {
@@ -60,7 +60,8 @@ public class CustomSerializer {
         File xmlFile = new File(file);
         try {
             Document doc = docBuilder.parse(xmlFile);
-            Class clazz = Class.forName("model." + doc.getDocumentElement().getNodeName());
+            System.out.println(doc.getDocumentElement().getNodeName());
+            Class clazz = Class.forName(doc.getDocumentElement().getNodeName());
             o = clazz.newInstance();
             if (doc.hasChildNodes()) {
                 iterateNode(doc.getChildNodes());
@@ -81,7 +82,7 @@ public class CustomSerializer {
                 if (tempNode.getAttributes().item(0) != null) {
                     attr = tempNode.getAttributes().item(0).toString();
                 }
-                if (!name.toUpperCase().equals(o.getClass().getSimpleName().toUpperCase())) {
+                if (!name.toUpperCase().equals(o.getClass().getName().toUpperCase())) {
                     Field field = o.getClass().getDeclaredField(name);
                     field.setAccessible(true);
                     switch (attr) {
