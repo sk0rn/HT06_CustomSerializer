@@ -60,7 +60,6 @@ public class CustomSerializer {
         File xmlFile = new File(file);
         try {
             Document doc = docBuilder.parse(xmlFile);
-            System.out.println(doc.getDocumentElement().getNodeName());
             Class clazz = Class.forName(doc.getDocumentElement().getNodeName());
             o = clazz.newInstance();
             if (doc.hasChildNodes()) {
